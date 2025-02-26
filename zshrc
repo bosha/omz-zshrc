@@ -43,6 +43,7 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/Users/bosha/Library/Python/3.8/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:~/bin
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
 #
 # AI Commit Message
