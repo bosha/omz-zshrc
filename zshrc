@@ -87,11 +87,55 @@ if command -v nvim &> /dev/null; then
 	fi
 fi
 
-alias ls='ls --color '
+if command -v eza &> /dev/null; then
+	alias ls='eza --icons --color=auto'
+	alias ll='eza -l --icons --color=auto'
+	alias la='eza -la --icons --color=auto'
+	alias l='eza -l --icons --color=auto'
+	alias l.='eza -ld --icons --color=auto .*'
+
+	alias lt='eza --tree --icons --color=auto --level=2'
+	alias ltt='eza --tree --icons --color=auto --level=3'
+
+	alias lsize='eza -l --sort=size --icons --color=auto'
+	alias lm='eza -l --sort=modified--icons --color=auto'
+else
+	alias ls='ls --color '
+	alias la='ls -al --color '
+fi
+
+if command -v yazi &> /dev/null; then
+	alias y='yazi'
+fi
+
+alias f='find . -name'
+
+if command -v fd &> /dev/null; then
+    alias fdf='fd -tf'  # Find files only
+    alias fdd='fd -td'  # Find directories only
+    alias fdi='fd -HI'  # Include hidden and ignored files
+    alias fdl='fd -l'   # List files with details
+else
+	# Shortcuts for find
+	alias fdf='find . -type f -name'
+	alias fdd='find . -type d -name'
+	alias fh='find ~ -name'
+	alias fsize='find . -type f -size' # find files and sort them by size
+	alias fmtime='find . -type f -mtime' # find files and sort them by modification time
+fi
+
+
+if command -v fzf &> /dev/null; then
+	source <(fzf --zsh) # use built-in fzf shell integration
+    alias fzf='fzf --preview "bat --color=always {}"'  # Fuzzy find files with preview
+    alias fzd='find . -type d | fzf'                   # Fuzzy find directories
+fi
+
 alias rm='nocorrect rm -Irv'
 alias s='nocorrect sudo'
 alias rm='rm -v'
-alias mv='mv -v'
+alias mv='nocorrect mv -v'
+alias cp='nocorrect cp -v'
 alias k='killall' 
 
 alias -g G='| grep -e'
@@ -150,3 +194,13 @@ pk () {
 	fi
 }
 
+# Fuzzy jump with zoxide and fzf
+zj() {
+  local dir
+  dir=$(zoxide query -l | fzf --height 40% --reverse --preview 'eza --tree --icons --color=always {}' --preview-window right:50%) && z "$dir"
+}
+
+if command -v zoxide &> /dev/null; then
+	eval "$(zoxide init zsh)"
+	alias zj='zj'
+fi
